@@ -61,42 +61,6 @@ def verification():
     )
 
 
-def verification(
-    nb_tit_for_tat,
-    nb_cheater,
-    nb_gudger,
-    nb_cooporate,
-    nb_match,
-    reward_cooperate,
-    reward_cheat,
-    reward_cheated,
-):
-    number = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    if (
-        nb_tit_for_tat in number
-        or nb_cheater in number
-        or nb_gudger in number
-        or nb_cooporate in number
-        or nb_match in number
-        or reward_cooperate in number
-        or reward_cheat in number
-        or reward_cheated in number
-    ):
-        print("____PLEASE ENTER NUMBERS_____")
-        enter_number()
-        sys.exit()
-    return (
-        int(nb_tit_for_tat),
-        int(nb_cheater),
-        int(nb_gudger),
-        int(nb_cooporate),
-        int(nb_match),
-        int(reward_cooperate),
-        int(reward_cheat),
-        int(reward_cheated),
-    )
-
-
 def play_round(
     player1, player2, nb_match, reward_cheat, reward_cooperate, reward_cheated
 ):
