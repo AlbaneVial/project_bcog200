@@ -13,18 +13,27 @@ This project aims to implement an interactive simulation of the Prisoner's Dilem
    - **Cheater**: Always betrays.  
    - **Grudger**: Cooperates, but if the opponent betrays once, it will betray forever.  
    - **Cooperator**: Always cooperates.  
-   - **Detective**: Starts by testing multiple strategies before adopting a winning approach.  
 3. **Graphical Interface**: Visualization of players as colored bubbles (blue for Tit-for-Tat, red for Cheater, yellow for Grudger, green for Cooperator). The user can adjust the number of each type of player, the  reward system  and the number of match per round.  
 
 
-## Begin architecture of code:
-1. Class Player:
-  - Attributes: strategy, score(per round)
-  - Methods: play (the strategy choosen depending on history and type of player)
-2. round:
-   - Attributes: player1, player2, history1 and history2
-   - Methods:
-      - Match : Suivant les player et history
+## Code Architecture
+
+### 1. Class Player  
+- **Attributes**: `strategy`, `score` (per round), `color`  
+- **Methods**: `play` (chooses a strategy based on history and player type)  
+
+### 2. Function round  
+- **Input**: `player1`, `player2`, `history1`, `history2`  
+- **Output**: Scores after the match  
+
+### 3. Class Canvas  
+- **Attributes**: Displays and updates the canvas each round  
+- **Methods**: `create_canvas`, `update_canvas`  
+
+### 4. Function enter_number  
+- Asks for the number of each player type, the number of matches per round, and the rewards  
+
+> **Note:** I am working on this project alone.
 
 ## Resources  
 - [The Evolution of Trust](https://ncase.me/trust/)
