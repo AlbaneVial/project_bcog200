@@ -77,7 +77,6 @@ def verification(
     ):
         print("____PLEASE ENTER NUMBERS_____")
         enter_number()
-        sys.exit()
     return (
         int(nb_tit_for_tat),
         int(nb_cheater),
