@@ -31,62 +31,33 @@ class canvas:
         pass
 
 
-def enter_number():
-    nb_tit_for_tat = input("nb_tit_for_tat: ")
-    nb_cheater = input("nb_cheater: ")
-    nb_gudger = input("nb_gudger: ")
-    nb_cooperator = input("nb_cooperator: ")
+def verification():
+    def get_valid_number(text):
+        number = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        condition = False
+        while not condition:
+            value = input(f"{text}: ")
+            if value in number:
+                return int(value)
+            print(f"Please enter a valid number for {text}.")
 
-    nb_match = input("nb_match: ")
-
-    reward_cooperate = input("reward_cooperate: ")
-    reward_cheat = input("reward_cheat: ")
-    reward_cheated = input("reward_cheated:  -")
+    nb_tit_for_tat = get_valid_number("nb_tit_for_tat")
+    nb_cheater = get_valid_number("nb_cheater")
+    nb_gudger = get_valid_number("nb_gudger")
+    nb_cooporate = get_valid_number("nb_cooporate")
+    nb_match = get_valid_number("nb_match")
+    reward_cooperate = get_valid_number("reward_cooperate")
+    reward_cheat = get_valid_number("reward_cheat")
+    reward_cheated = get_valid_number("reward_cheated")
     return (
         nb_tit_for_tat,
         nb_cheater,
         nb_gudger,
-        nb_cooperator,
+        nb_cooporate,
         nb_match,
         reward_cooperate,
         reward_cheat,
         reward_cheated,
-    )
-
-
-def verification(
-    nb_tit_for_tat,
-    nb_cheater,
-    nb_gudger,
-    nb_cooporate,
-    nb_match,
-    reward_cooperate,
-    reward_cheat,
-    reward_cheated,
-):
-    number = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    if (
-        nb_tit_for_tat in number
-        or nb_cheater in number
-        or nb_gudger in number
-        or nb_cooporate in number
-        or nb_match in number
-        or reward_cooperate in number
-        or reward_cheat in number
-        or reward_cheated in number
-    ):
-        print("____PLEASE ENTER NUMBERS_____")
-        enter_number()
-        sys.exit()
-    return (
-        int(nb_tit_for_tat),
-        int(nb_cheater),
-        int(nb_gudger),
-        int(nb_cooporate),
-        int(nb_match),
-        int(reward_cooperate),
-        int(reward_cheat),
-        int(reward_cheated),
     )
 
 
@@ -117,6 +88,7 @@ def play_round(
 
 
 def main():
+
     (
         nb_tit_for_tat,
         nb_cheater,
@@ -126,26 +98,7 @@ def main():
         reward_cooperate,
         reward_cheat,
         reward_cheated,
-    ) = enter_number()
-    (
-        nb_tit_for_tat,
-        nb_cheater,
-        nb_gudger,
-        nb_cooperator,
-        nb_match,
-        reward_cooperate,
-        reward_cheat,
-        reward_cheated,
-    ) = verification(
-        nb_tit_for_tat,
-        nb_cheater,
-        nb_gudger,
-        nb_cooperator,
-        nb_match,
-        reward_cooperate,
-        reward_cheat,
-        reward_cheated,
-    )
+    ) = verification()
     list_tit_for_tat = [player("tit_for_tat", "red") for _ in range(nb_tit_for_tat)]
     list_cheater = [player("cheater", "blue") for _ in range(nb_cheater)]
     list_gudger = [player("gudger", "green") for _ in range(nb_gudger)]
