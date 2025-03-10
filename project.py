@@ -1,4 +1,5 @@
 import tkinter as tk
+import sys
 
 
 class player:
@@ -17,12 +18,76 @@ class player:
                 return "cooperate"
         if self.personality == "tit_for_tat":
             if "cheat" in history[:-1]:
-                print(history[:-1])
                 return "cheat"
             else:
                 return "cooperate"
         if self.personality == "cooperator":
             return "cooperate"
+
+
+class canvas:
+    def __init__(self, nb_tit_for_tat=4, nb_cheater=4, nb_gudger=4, nb_cooporate=4):
+        """show the canvas and update the canva"""
+        pass
+
+
+def enter_number():
+    nb_tit_for_tat = input("nb_tit_for_tat: ")
+    nb_cheater = input("nb_cheater: ")
+    nb_gudger = input("nb_gudger: ")
+    nb_cooperator = input("nb_cooperator: ")
+
+    nb_match = input("nb_match: ")
+
+    reward_cooperate = input("reward_cooperate: ")
+    reward_cheat = input("reward_cheat: ")
+    reward_cheated = input("reward_cheated:  -")
+    return (
+        nb_tit_for_tat,
+        nb_cheater,
+        nb_gudger,
+        nb_cooperator,
+        nb_match,
+        reward_cooperate,
+        reward_cheat,
+        reward_cheated,
+    )
+
+
+def verification(
+    nb_tit_for_tat,
+    nb_cheater,
+    nb_gudger,
+    nb_cooporate,
+    nb_match,
+    reward_cooperate,
+    reward_cheat,
+    reward_cheated,
+):
+    number = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    if (
+        nb_tit_for_tat in number
+        or nb_cheater in number
+        or nb_gudger in number
+        or nb_cooporate in number
+        or nb_match in number
+        or reward_cooperate in number
+        or reward_cheat in number
+        or reward_cheated in number
+    ):
+        print("____PLEASE ENTER NUMBERS_____")
+        enter_number()
+        sys.exit()
+    return (
+        int(nb_tit_for_tat),
+        int(nb_cheater),
+        int(nb_gudger),
+        int(nb_cooporate),
+        int(nb_match),
+        int(reward_cooperate),
+        int(reward_cheat),
+        int(reward_cheated),
+    )
 
 
 def play_round(
@@ -51,45 +116,17 @@ def play_round(
         )"""
 
 
-class canvas:
-    def __init__(self, nb_tit_for_tat=4, nb_cheater=4, nb_gudger=4, nb_cooporate=4):
-        """ """
-        pass
-
-
-def verification(
-    nb_tit_for_tat,
-    nb_cheater,
-    nb_gudger,
-    nb_cooporate,
-    nb_match,
-    reward_cooperate,
-    reward_cheat,
-    reward_cheated,
-):
-    return (
-        int(nb_tit_for_tat),
-        int(nb_cheater),
-        int(nb_gudger),
-        int(nb_cooporate),
-        int(nb_match),
-        int(reward_cooperate),
-        int(reward_cheat),
-        int(reward_cheated),
-    )
-
-
 def main():
-    nb_tit_for_tat = input("nb_tit_for_tat: ")
-    nb_cheater = input("nb_cheater: ")
-    nb_gudger = input("nb_gudger: ")
-    nb_cooperator = input("nb_cooperator: ")
-
-    nb_match = input("nb_match: ")
-
-    reward_cooperate = input("reward_cooperate: ")
-    reward_cheat = input("reward_cheat: ")
-    reward_cheated = input("reward_cheated:  -")
+    (
+        nb_tit_for_tat,
+        nb_cheater,
+        nb_gudger,
+        nb_cooperator,
+        nb_match,
+        reward_cooperate,
+        reward_cheat,
+        reward_cheated,
+    ) = enter_number()
     (
         nb_tit_for_tat,
         nb_cheater,
