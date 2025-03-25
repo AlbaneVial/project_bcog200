@@ -36,19 +36,19 @@ def verification():
         number = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
         condition = False
         while not condition:
-            value = input(f"{text}: ")
+            value = input(f"{text} ")
             if value in number:
                 return int(value)
             print(f"Please enter a valid number for {text}.")
 
-    nb_tit_for_tat = get_valid_number("nb_tit_for_tat")
-    nb_cheater = get_valid_number("nb_cheater")
-    nb_gudger = get_valid_number("nb_gudger")
-    nb_cooporate = get_valid_number("nb_cooporate")
-    nb_match = get_valid_number("nb_match")
-    reward_cooperate = get_valid_number("reward_cooperate")
-    reward_cheat = get_valid_number("reward_cheat")
-    reward_cheated = get_valid_number("reward_cheated")
+    nb_tit_for_tat = get_valid_number("nb_tit_for_tat:")
+    nb_cheater = get_valid_number("nb_cheater:")
+    nb_gudger = get_valid_number("nb_gudger:")
+    nb_cooporate = get_valid_number("nb_cooporate:")
+    nb_match = get_valid_number("nb_match:")
+    reward_cooperate = get_valid_number("reward_cooperate:")
+    reward_cheat = get_valid_number("reward_cheat:")
+    reward_cheated = get_valid_number("reward_cheated:  -")
     return (
         nb_tit_for_tat,
         nb_cheater,
