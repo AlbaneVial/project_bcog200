@@ -29,7 +29,7 @@ class Display:
             "nb_cheater",
             "nb_gudger",
             "nb_cooporate",
-            "nb_match",
+            "nb_round",
             "reward_cooperate",
             "reward_cheat",
             "reward_cheated",
@@ -74,7 +74,7 @@ class Display:
                 self.nb_cheater,
                 self.nb_gudger,
                 self.nb_cooporate,
-                self.nb_match,
+                self.nb_round,
                 self.reward_cooperate,
                 self.reward_cheat,
                 self.reward_cheated,
@@ -102,7 +102,7 @@ class Display:
                 play_round(
                     self.players[i],
                     self.players[j],
-                    self.nb_match,
+                    self.nb_round,
                     self.reward_cooperate,
                     self.reward_cheat,
                     self.reward_cheated,
@@ -178,12 +178,12 @@ class Player:
 
 
 def play_round(
-    player1, player2, nb_match, reward_cooperate, reward_cheat, reward_cheated
+    player1, player2, nb_round, reward_cooperate, reward_cheat, reward_cheated
 ):
     history1 = []
     history2 = []
 
-    for _ in range(nb_match):
+    for _ in range(nb_round):
         strategy1 = player1.play(history1)
         strategy2 = player2.play(history2)
         history1.append(strategy2)
