@@ -9,6 +9,7 @@ class Display:
         self.root = tk.Tk()
         self.init_window()
         self.create_interface_frame()
+        self.load_images()
 
     def init_window(self):
         self.root.title("THE EVOLUTION OF TRUST")
@@ -23,72 +24,37 @@ class Display:
         self.interface_frame.grid(row=0, column=0)
 
     def create_interface_frame(self):
-
-        tk.Label(self.interface_frame, text="nb_tit_for_tat").grid(row=0)
-        tk.Label(self.interface_frame, text="nb_cheater").grid(row=1)
-        tk.Label(self.interface_frame, text="nb_gudger").grid(row=2)
-        tk.Label(self.interface_frame, text="nb_cooporate").grid(row=3)
-        tk.Label(self.interface_frame, text="nb_match").grid(row=4)
-        tk.Label(self.interface_frame, text="reward_cooperate").grid(row=5)
-        tk.Label(self.interface_frame, text="reward_cheat").grid(row=6)
-        tk.Label(self.interface_frame, text="reward_cheated").grid(row=7)
-
-        self.nb_tit_for_tat_entry = tk.Entry(self.interface_frame, bg="white")
-        self.nb_tit_for_tat_entry.grid(row=0, column=1)
-        self.nb_tit_for_tat_entry.insert(0, "2")
-
-        self.nb_cheater_entry = tk.Entry(self.interface_frame, bg="white")
-        self.nb_cheater_entry.grid(row=1, column=1)
-        self.nb_cheater_entry.insert(0, "2")
-
-        self.nb_gudger_entry = tk.Entry(self.interface_frame, bg="white")
-        self.nb_gudger_entry.grid(row=2, column=1)
-        self.nb_gudger_entry.insert(0, "2")
-
-        self.nb_cooporate_entry = tk.Entry(self.interface_frame, bg="white")
-        self.nb_cooporate_entry.grid(row=3, column=1)
-        self.nb_cooporate_entry.insert(0, "2")
-
-        self.nb_match_entry = tk.Entry(self.interface_frame, bg="white")
-        self.nb_match_entry.grid(row=4, column=1)
-        self.nb_match_entry.insert(0, "5")
-
-        self.reward_cooperate_entry = tk.Entry(self.interface_frame, bg="white")
-        self.reward_cooperate_entry.grid(row=5, column=1)
-        self.reward_cooperate_entry.insert(0, "3")
-
-        self.reward_cheat_entry = tk.Entry(self.interface_frame, bg="white")
-        self.reward_cheat_entry.grid(row=6, column=1)
-        self.reward_cheat_entry.insert(0, "6")
-
-        self.reward_cheated_entry = tk.Entry(self.interface_frame, bg="white")
-        self.reward_cheated_entry.grid(row=7, column=1)
-        self.reward_cheated_entry.insert(0, "0")
-
-        self.entry = [
-            self.nb_tit_for_tat_entry,
-            self.nb_cheater_entry,
-            self.nb_gudger_entry,
-            self.nb_cooporate_entry,
-            self.nb_match_entry,
-            self.reward_cooperate_entry,
-            self.reward_cheat_entry,
-            self.reward_cheated_entry,
+        labels = [
+            "nb_tit_for_tat",
+            "nb_cheater",
+            "nb_gudger",
+            "nb_cooporate",
+            "nb_match",
+            "reward_cooperate",
+            "reward_cheat",
+            "reward_cheated",
         ]
+        default_values = ["2", "2", "2", "2", "5", "2", "3", "1"]
 
-        self.entry_num_button = tk.Button(
+        self.entry = []
+        for i, (label, default) in enumerate(zip(labels, default_values)):
+            tk.Label(self.interface_frame, text=label).grid(row=i, column=0)
+            entry = tk.Entry(self.interface_frame, bg="white")
+            entry.grid(row=i, column=1)
+            entry.insert(0, default)
+            self.entry.append(entry)
+
+        tk.Button(
             self.interface_frame,
             text="Show the character",
             command=self.create_circle_of_characters,
-        )
-        self.entry_num_button.grid(row=8, column=0)
+        ).grid(row=len(labels), column=0)
 
-        self.start_step_by_step = tk.Button(
+        tk.Button(
             self.interface_frame,
             text="start_step_by_step",
             command=self.play_match,
-        )
-        self.start_step_by_step.grid(row=9, column=0)
+        ).grid(row=len(labels) + 1, column=0)
 
     def create_circle_of_characters(self):
         self.canvas_width = self.screen_size[0] - 200
@@ -131,11 +97,8 @@ class Display:
         self.update_canvas()
 
     def play_match(self):
-
         for i in range(self.total_characters):
-
             for j in range(i + 1, self.total_characters):
-
                 play_round(
                     self.players[i],
                     self.players[j],
@@ -144,13 +107,11 @@ class Display:
                     self.reward_cheat,
                     self.reward_cheated,
                 )
-
         self.update_canvas()
         self.remove_and_replace_players()
 
     def remove_and_replace_players(self):
         self.players.sort(key=lambda player: player.score)
-
         best_player = max(self.players, key=lambda player: player.score)
 
         self.players = self.players[1:]
@@ -177,19 +138,24 @@ class Display:
             player.x = x
             player.y = y
 
-            self.canvas.create_oval(
-                x - 20, y - 20, x + 20, y + 20, fill=player.color, outline="black"
-            )
-            self.canvas.create_text(
-                x, y, text=player.personality[0], font=("Arial", 10), fill="black"
+            self.canvas.create_image(
+                x, y, image=self.images[player.personality], anchor=tk.CENTER
             )
             self.canvas.create_text(
                 x,
-                y + 25,
+                y + 40,
                 text=f"Score: {player.score}",
                 font=("Arial", 10),
                 fill="black",
             )
+
+    def load_images(self):
+        self.images = {
+            "gudger": tk.PhotoImage(file="grudger.gif"),
+            "cooperator": tk.PhotoImage(file="cooporate.gif"),
+            "cheater": tk.PhotoImage(file="cheater.gif"),
+            "tit_for_tat": tk.PhotoImage(file="tit_for_tat.gif"),
+        }
 
 
 class Player:
@@ -212,16 +178,17 @@ class Player:
 
 
 def play_round(
-    player1, player2, nb_match, reward_cheat, reward_cooperate, reward_cheated
+    player1, player2, nb_match, reward_cooperate, reward_cheat, reward_cheated
 ):
     history1 = []
     history2 = []
 
-    for i in range(nb_match):
+    for _ in range(nb_match):
         strategy1 = player1.play(history1)
         strategy2 = player2.play(history2)
         history1.append(strategy2)
         history2.append(strategy1)
+
         if strategy1 == "cooperate" and strategy2 == "cooperate":
             player1.score += reward_cooperate
             player2.score += reward_cooperate
