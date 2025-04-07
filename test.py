@@ -133,7 +133,9 @@ class Display:
     def play_match(self):
 
         for i in range(self.total_characters):
-
+            print(
+                f"score of player before {self.players[i].personality}: {self.players[i].score}"
+            )
             for j in range(i + 1, self.total_characters):
 
                 play_round(
@@ -144,9 +146,12 @@ class Display:
                     self.reward_cheat,
                     self.reward_cheated,
                 )
-
+            print(
+                f"score of player {self.players[i].personality}: {self.players[i].score}"
+            )
         self.update_canvas()
         self.remove_and_replace_players()
+        print("hello")
 
     def remove_and_replace_players(self):
         self.players.sort(key=lambda player: player.score)
@@ -231,6 +236,9 @@ def play_round(
         elif strategy1 == "cheat" and strategy2 == "cooperate":
             player1.score += reward_cheat
             player2.score -= reward_cheated
+        print(
+            f"    après {i}ieme round entre {player1.personality} (score: {player1.score}) et {player2.personality} (score: {player2.score})"
+        )
 
 
 def main():
