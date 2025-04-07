@@ -106,7 +106,7 @@ Here are some potential features that could be added in the future to enhance th
   Show a welcome message or instruction panel before launching the canvas, so users understand the purpose and how to interact with the simulation.
 
 - **Step-by-Step Strategy Demonstration:**  
-  Just like the interactive explanation in [Nicky Case’s "The Evolution of Trust"](https://ncase.me/trust/), consider showing how each personality behaves in sample rounds to help users understand strategies before running the full simulation.
+  Just like the interactive explanation in ["The Evolution of Trust"](https://ncase.me/trust/), consider showing how each personality behaves in sample rounds to help users understand strategies before running the full simulation.
 
 - **Add a “Stop” Button:**  
   Allow the user to stop or reset the simulation entirely, without having to close and restart the program.
