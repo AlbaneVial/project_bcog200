@@ -45,19 +45,36 @@ class TrustApp:
 
     def create_panels(self):
         self.panels = {}
+
+        # i use chatgpt to fix how use method in other class, this my conversation with chatgpt:
+
+        # self.panels["intro"] = IntroPanel(
+        #     self.root,
+        #     self.images,
+        #     self.personnality,
+        #     start_callback=self.show_panel("bot0"),
+        # )
+        # why this doesn't work? how to use method in other class?
+
+        # answer from chatgpt:
+        # You need to pass a function without calling it immediately. Use a lambda or a function reference like this:
+        # 💡 Why this matters
+        # In Python, self.show_panel("bot0") calls the function and returns its result (which is probably None), while lambda: self.show_panel("bot0") creates a function that you can call later.
+
         self.panels["intro"] = IntroPanel(
             self.root,
             self.images,
             self.personnality,
             start_callback=lambda: self.show_panel("bot0"),
         )
+
         for i, personnality_bot in enumerate(self.personnality):
             self.panels[f"bot{i}"] = BotMatchPanel(
                 self.root,
                 self.images,
                 index=i,
                 personality_bot=personnality_bot,
-                next_bot_callback=lambda idx=i: self.next_bot(idx),
+                next_bot_callback=lambda i=i: self.next_bot(i),
                 skip_demo_callback=lambda: self.show_panel("topo"),
             )
 
@@ -238,15 +255,19 @@ class BotMatchPanel(tk.Frame):
 
     def handle_user_choice(self, user_choice):
         self.user.personality = user_choice
-        strategy_bot, strategy_user = turn(self.bot, self.user, 2, 3, 1)
+        turn(self.bot, self.user, 2, 3, 1)
 
         for widget in self.play_frame.grid_slaves():
             info = widget.grid_info()
             if info["row"] == 4 and info["column"] in [1, 2]:
                 widget.destroy()
 
-        tk.Label(self.play_frame, text=strategy_user, bg="white").grid(row=4, column=1)
-        tk.Label(self.play_frame, text=strategy_bot, bg="white").grid(row=4, column=2)
+        tk.Label(self.play_frame, text=self.bot.history[-1], bg="white").grid(
+            row=4, column=1
+        )
+        tk.Label(self.play_frame, text=self.user.history[-1], bg="white").grid(
+            row=4, column=2
+        )
         self.round += 1
         if self.round == 5:
             self.explication_show()
@@ -261,29 +282,33 @@ class BotMatchPanel(tk.Frame):
         if self.bot.personality == "tit_for_tat":
             tk.Label(
                 self.play_frame,
-                text="🔁 This player copies your last move. Fair and balanced — but don’t betray them!",
+                text="This player copies your last move. Fair and balanced — but don’t betray them!",
                 bg="white",
+                font=("Arial", 15),
             ).grid(row=7, column=0, columnspan=4, pady=10)
 
         elif self.bot.personality == "cheater":
             tk.Label(
                 self.play_frame,
-                text="😈 This player seems to always cheat... Trust is not in their vocabulary!",
+                text="This player seems to always cheat... Trust is not in their vocabulary!",
                 bg="white",
+                font=("Arial", 15),
             ).grid(row=7, column=0, columnspan=4, pady=10)
 
         elif self.bot.personality == "grudger":
             tk.Label(
                 self.play_frame,
-                text="😤 This player holds grudges! One betrayal and they never forgive.",
+                text="This player holds grudges! One betrayal and they never forgive.",
                 bg="white",
+                font=("Arial", 15),
             ).grid(row=7, column=0, columnspan=4, pady=10)
 
         elif self.bot.personality == "cooperator":
             tk.Label(
                 self.play_frame,
-                text="🕊️ This player always cooperates. Too pure for this world...",
+                text="This player always cooperates. Too pure for this world...",
                 bg="white",
+                font=("Arial", 15),
             ).grid(row=7, column=0, columnspan=4, pady=10)
             for widget in self.play_frame.grid_slaves():
                 info = widget.grid_info()
@@ -300,15 +325,13 @@ class TopoPanel(tk.Frame):
         self.build()
 
     def build(self):
-        tk.Label(
-            self, text="🔎 Who are the players?", font=("Arial", 24), pady=20
-        ).pack()
+        tk.Label(self, text="Who are the players?", font=("Arial", 24), pady=20).pack()
 
         descriptions = {
-            "cheater": "😈 Always cheats. Doesn't care about trust or cooperation.",
-            "cooperator": "😇 Always cooperates. Believes in the goodness of others.",
-            "grudger": "😠 Cooperates until betrayed once... then never again!",
-            "tit_for_tat": "🔁 Starts by cooperating, then mimics your last move. Fair, but not naive.",
+            "cheater": "Always cheats. Doesn't care about trust or cooperation.",
+            "cooperator": "Always cooperates. Believes in the goodness of others.",
+            "grudger": "Cooperates until betrayed once... then never again!",
+            "tit_for_tat": "Starts by cooperating, then mimics your last move. Fair, but not naive.",
         }
 
         for strat in self.personnality:
@@ -330,7 +353,7 @@ class TopoPanel(tk.Frame):
 
         tk.Label(
             self,
-            text="🧠 Now it's time to see them compete!\nYou will define the rewards and number of rounds.\nAt the end of each match, the worst player will be eliminated and replaced by a copy of the best one.",
+            text="Now it's time to see them compete!\nYou will define the rewards and number of rounds.\nAt the end of each match, the worst player will be eliminated and replaced by a copy of the best one.",
             font=("Arial", 16),
             pady=20,
             wraplength=900,

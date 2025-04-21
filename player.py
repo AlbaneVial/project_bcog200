@@ -44,4 +44,3 @@ def turn(player1, player2, reward_cooperate, reward_cheat, reward_cheated):
     elif strategy1 == "cheat" and strategy2 == "cooperate":
         player1.score += reward_cheat
         player2.score -= reward_cheated
-    return strategy1, strategy2

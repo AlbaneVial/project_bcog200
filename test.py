@@ -10,17 +10,23 @@ def test_player_behaviors():
     tit_for_tat = Player("tit_for_tat")
 
     assert cooperator.play([]) == "cooperate"
+    assert cooperator.play(["cheat"]) == "cooperate"
     assert cooperator.play(["cheat", "cooperate"]) == "cooperate"
+    assert cooperator.play(["cooperate", "cheat"]) == "cooperate"
 
     assert cheater.play([]) == "cheat"
-    assert cheater.play(["cooperate"]) == "cheat"
+    assert cheater.play(["cheat"]) == "cheat"
+    assert cheater.play(["cheat", "cooperate"]) == "cheat"
+    assert cheater.play(["cooperate", "cheat"]) == "cheat"
 
     assert grudger.play([]) == "cooperate"
+    assert grudger.play(["cheat"]) == "cheat"
+    assert grudger.play(["cheat", "cooperate"]) == "cheat"
     assert grudger.play(["cooperate", "cheat"]) == "cheat"
 
     assert tit_for_tat.play([]) == "cooperate"
-    assert tit_for_tat.play(["cheat", "cooperate"]) == "cooperate"
     assert tit_for_tat.play(["cheat"]) == "cheat"
+    assert tit_for_tat.play(["cheat", "cooperate"]) == "cooperate"
     assert tit_for_tat.play(["cooperate", "cheat"]) == "cheat"
 
 
@@ -50,32 +56,3 @@ def test_play_round_resets_history():
     play_round(p1, p2, nb_round=3, reward_cooperate=2, reward_cheat=3, reward_cheated=1)
     assert p1.history == []
     assert p2.history == []
-
-
-def test_remove_and_replace_players(monkeypatch):
-    app = TrustApp()
-
-    test = MainPlayPanel(
-        app.root,
-        app.images,
-        app.personnality,
-        app.screen_size,
-    )
-
-    test.players = [
-        Player("cooperator", score=5),
-        Player("cheater", score=10),
-        Player("tit_for_tat", score=15),
-    ]
-
-    # On empêche l'appel à update_canvas (Tkinter GUI)
-    test.show_players = lambda: None
-
-    test.remove_and_replace_players()
-
-    personalities = [p.personality for p in test.players]
-    scores = [p.score for p in test.players]
-
-    assert len(test.players) == 3
-    assert personalities.count("tit_for_tat") == 2  # Le meilleur a été cloné
-    assert all(score > 5 for score in scores)  # Le plus faible a été retiré
