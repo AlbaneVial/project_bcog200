@@ -1,7 +1,6 @@
-from enum import Enum
-
-
 class Player:
+    """Represents a player in the Evolution of trust simulation with a personality."""
+
     def __init__(self, personality, score=300, x=0, y=0):
         self.personality = personality
         self.score = score
@@ -10,6 +9,7 @@ class Player:
         self.y = y
 
     def play(self, history):
+        """Decide next move based on own personality and opponent history."""
         if self.personality == "cheater":
             return "cheat"
         if self.personality == "grudger":
@@ -23,6 +23,7 @@ class Player:
 def play_round(
     player1, player2, nb_round, reward_cooperate, reward_cheat, reward_cheated
 ):
+    """Conduct a series of rounds between two players."""
     for _ in range(nb_round):
         turn(player1, player2, reward_cooperate, reward_cheat, reward_cheated)
     player1.history = []
@@ -30,6 +31,7 @@ def play_round(
 
 
 def turn(player1, player2, reward_cooperate, reward_cheat, reward_cheated):
+    """Execute a single turn: both players choose actions and update scores."""
     strategy1 = player1.play(player1.history)
     strategy2 = player2.play(player2.history)
     player1.history.append(strategy2)

@@ -7,7 +7,10 @@ from player import Player, play_round, turn
 
 
 class TrustApp:
+    """Main application class that manages navigation between different game panels."""
+
     def __init__(self):
+
         self.personnality = ["tit_for_tat", "cheater", "grudger", "cooperator"]
         self.screen_size = [1500, 1000]
 
@@ -21,6 +24,7 @@ class TrustApp:
         self.show_panel("intro")
 
     def load_images(self):
+        """Loads the images associated with each bot personality."""
         self.images = {}
         image_files = {
             "grudger": "grudger.gif",
@@ -40,10 +44,12 @@ class TrustApp:
             self.images[key] = tk.PhotoImage(file=filename)
 
     def init_window(self):
+        """Configures the size and title of the main window."""
         self.root.title("THE EVOLUTION OF TRUST")
         self.root.geometry(f"{self.screen_size[0]}x{self.screen_size[1]}")
 
     def create_panels(self):
+        """Instantiate all panels: intro, bot matches, topology, and main play."""
         self.panels = {}
 
         # i use chatgpt to fix how use method in other class, this my conversation with chatgpt:
@@ -93,12 +99,14 @@ class TrustApp:
         )
 
     def show_panel(self, name):
+        """Hide current panel and display the next panel."""
         if self.current is not None:
             self.current.pack_forget()
         self.current = self.panels[name]
         self.current.pack()
 
     def next_bot(self, i):
+        """Move to the next bot panel or to the topo panel if all bots are done."""
         i += 1
         if i < 4:
             self.show_panel(f"bot{i}")
@@ -110,6 +118,8 @@ class TrustApp:
 
 
 class IntroPanel(tk.Frame):
+    """Introduction panel that welcomes the player and shows bot images."""
+
     def __init__(self, root, images, personnality, start_callback):
         super().__init__(root, bg="white")
         self.images = images
@@ -118,6 +128,7 @@ class IntroPanel(tk.Frame):
         self.build()
 
     def build(self):
+        """Build the intro layout: title, description, images, and start button."""
         tk.Label(
             self,
             text="Welcome to the game 'The Evolution of Trust'!",
@@ -156,6 +167,8 @@ class IntroPanel(tk.Frame):
 
 
 class BotMatchPanel(tk.Frame):
+    """Panel where the user plays 5 rounds against each type of player."""
+
     def __init__(
         self,
         root,
@@ -182,6 +195,7 @@ class BotMatchPanel(tk.Frame):
         self.build()
 
     def build(self):
+        """Build the match interface."""
         tk.Label(
             self.play_frame,
             text=f"Match vs Bot n°{self.index +1} of 4",
@@ -235,6 +249,7 @@ class BotMatchPanel(tk.Frame):
         self.update_scores()
 
     def update_scores(self):
+        """Update labels showing current round number and player scores."""
         tk.Label(
             self.play_frame,
             text=f"Round n°{self.round } of 5",
@@ -254,6 +269,7 @@ class BotMatchPanel(tk.Frame):
         )
 
     def handle_user_choice(self, user_choice):
+        """Process the user's choice, play a turn, showing the strategy of the players and calls the definition update_scores. If the 5 turns is over, it calls explication_show."""
         self.user.personality = user_choice
         turn(self.bot, self.user, 2, 3, 1)
 
@@ -275,7 +291,7 @@ class BotMatchPanel(tk.Frame):
         self.update_scores()
 
     def explication_show(self):
-
+        """Display an explanation of the bot's strategy after completing all turns."""
         for widget in self.play_frame.grid_slaves(row=6 or 7):
             widget.destroy()
 
@@ -317,6 +333,8 @@ class BotMatchPanel(tk.Frame):
 
 
 class TopoPanel(tk.Frame):
+    """Panel summarizing the strategies of different types of players"""
+
     def __init__(self, root, images, personnality, start_callback):
         super().__init__(root)
         self.images = images
@@ -325,8 +343,9 @@ class TopoPanel(tk.Frame):
         self.build()
 
     def build(self):
-        tk.Label(self, text="Who are the players?", font=("Arial", 24), pady=20).pack()
+        """Build the summarize interface."""
 
+        tk.Label(self, text="Who are the players?", font=("Arial", 24), pady=20).pack()
         descriptions = {
             "cheater": "Always cheats. Doesn't care about trust or cooperation.",
             "cooperator": "Always cooperates. Believes in the goodness of others.",
@@ -366,6 +385,8 @@ class TopoPanel(tk.Frame):
 
 
 class MainPlayPanel(tk.Frame):
+    """Panel for configuring and running the tournament simulation."""
+
     def __init__(self, root, images, personnality, screen_size):
         super().__init__(root)
         self.images = images
@@ -395,6 +416,7 @@ class MainPlayPanel(tk.Frame):
         self.build()
 
     def build(self):
+        """Create entry fields for number of each bot, match settings, and action buttons."""
         tk.Label(self.settingframe, text="Match Settings", font=("Arial", 16)).grid(
             row=0, column=0, columnspan=2
         )
@@ -428,11 +450,12 @@ class MainPlayPanel(tk.Frame):
         tk.Button(
             self.settingframe,
             text="Start match",
-            command=self.start_round_robin,
+            command=self.run_tournament,
             font=("Arial", 12),
         ).grid(row=len(labels) + 2, column=0, columnspan=2)
 
     def show_players(self):
+        """Read user inputs, validate, create Player list, and calls the draw draw_players_circle definition."""
         try:
             values = [int(entry.get()) for entry in self.entries]
             (
@@ -469,6 +492,7 @@ class MainPlayPanel(tk.Frame):
         self.draw_players_circle()
 
     def draw_players_circle(self):
+        """Draw players in a circle on the canva with their scores."""
         self.canvas.delete("all")
 
         self.canvas_width = self.screen_size[0] - 200
@@ -492,7 +516,8 @@ class MainPlayPanel(tk.Frame):
                 fill="black",
             )
 
-    def start_round_robin(self):
+    def run_tournament(self):
+        """Run a tournament: each pair plays nb_round rounds."""
         for i in range(self.total_characters):
             for j in range(i + 1, self.total_characters):
                 play_round(
@@ -507,6 +532,7 @@ class MainPlayPanel(tk.Frame):
         self.remove_and_replace_players()
 
     def remove_and_replace_players(self):
+        """Eliminate the lowest score and duplicate the highest, then redraw circle."""
         self.players.sort(key=lambda player: player.score)
         best_player = max(self.players, key=lambda player: player.score)
 
